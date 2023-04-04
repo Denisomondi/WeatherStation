@@ -151,4 +151,4 @@ function toggleUnits() {
     }
     isFahrenheit = !isFahrenheit;
   }
-  
+  $("#toggle-units").on("click", toggleUnits);
