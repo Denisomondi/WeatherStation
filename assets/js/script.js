@@ -1,12 +1,3 @@
-const unitToggle = document.getElementById('unit-toggle');
-const units = {
-    metric: 'C',
-    imperial: 'F'
-  };
-
-let currentUnit = 'metric';
-
-
 var apiKey = "bd55593ecb666c01d38f4ec9276324e8";
 
 var city = "";
