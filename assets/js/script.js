@@ -1,3 +1,12 @@
+const unitToggle = document.getElementById('unit-toggle');
+const units = {
+    metric: 'C',
+    imperial: 'F'
+  };
+
+let currentUnit = 'metric';
+
+
 var apiKey = "bd55593ecb666c01d38f4ec9276324e8";
 
 var city = "";
@@ -29,44 +38,52 @@ function displayWeather(event) {
 // Current forecast
 function currentWeather(city) {
     var apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&APPID=" + apiKey;
-    $.ajax({
-        url: apiUrl,
-        method: "GET",
-    }).then(function (response) {
+  
+    fetch(apiUrl)
+      .then(function(response) {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error('Network response was not ok.');
+      })
+      .then(function(response) {
         console.log(response);
         var weathericon = response.weather[0].icon;
         var iconurl = "https://openweathermap.org/img/wn/" + weathericon + "@2x.png";
         var date = new Date(response.dt * 1000).toLocaleDateString();
         $(currentCity).html(response.name + " " + "(" + date + ")" + "<img src=" + iconurl + ">");
         var tempF = (response.main.temp - 273.15) * 1.80 + 32;
-
+  
         $(currentTemperature).html(" " + (tempF).toFixed(2) +" " +  "&#8457");
         $(currentHumidity).html(" " + response.main.humidity +" " +  "%");
         var ws = response.wind.speed;
         var windsmph = (ws * 2.237).toFixed(1);
         $(currentWind).html(" " + windsmph +" " +  "MPH");
-
+  
         forecast(response.id);
         if (response.cod == 200) {
-            sCity = JSON.parse(localStorage.getItem("cityname"));
-            console.log(sCity);
-            if (sCity == null) {
-                sCity = [];
-                sCity.push(city.toUpperCase()
-                );
-                localStorage.setItem("cityname", JSON.stringify(sCity));
-                addToList(city);
+          sCity = JSON.parse(localStorage.getItem("cityname"));
+          console.log(sCity);
+          if (sCity == null) {
+            sCity = [];
+            sCity.push(city.toUpperCase());
+            localStorage.setItem("cityname", JSON.stringify(sCity));
+            addToList(city);
+          }
+          else {
+            if (find(city) > 0) {
+              sCity.push(city.toUpperCase());
+              localStorage.setItem("cityname", JSON.stringify(sCity));
+              addToList(city);
             }
-            else {
-                if (find(city) > 0) {
-                    sCity.push(city.toUpperCase());
-                    localStorage.setItem("cityname", JSON.stringify(sCity));
-                    addToList(city);
-                }
-            }
+          }
         }
-    });
-}
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+  }
+  
 
 // Five Day forecast
 function forecast(cityid) {
@@ -118,6 +135,13 @@ function loadlastCity() {
         currentWeather(city);
     }
 }
+
+
+// Event listener for location search form submit
+document.getElementById('search-button').addEventListener('submit', (event) => {
+    event.preventDefault();
+    currentWeather();
+  });
 
 $("#search-button").on("click", displayWeather);
 $(document).on("click", invokePastSearch);
