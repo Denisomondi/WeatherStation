@@ -7,7 +7,7 @@ body {
 
 header {
     text-align: center;
-    background-image: linear-gradient(to right, #3b6ec4, #230455);
+    background-color:  #007bff;
     color: white;
     padding: 10px;
 }
@@ -36,4 +36,13 @@ header {
     .col-6 {
         max-width: 100%;
     }
+}
+.unit-toggle{
+    width: 19vh;
+    height: 4vh;
+    border: none;
+    border-radius: 6px;
+    background-color: #007bff;
+    color: aliceblue;
+    margin-bottom: 2vh;
 }
