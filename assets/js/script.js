@@ -138,3 +138,17 @@ document.getElementById('search-button').addEventListener('submit', (event) => {
 $("#search-button").on("click", displayWeather);
 $(document).on("click", invokePastSearch);
 $(window).on("load", loadlastCity);
+
+var isFahrenheit = true;
+function toggleUnits() {
+    var temperature = parseFloat(currentTemperature.html());
+    if (isFahrenheit) {
+      temperature = (temperature - 32) * (5/9);
+      currentTemperature.html(temperature.toFixed(2) + " &#8451");
+    } else {
+      temperature = (temperature * (9/5)) + 32;
+      currentTemperature.html(temperature.toFixed(2) + " &#8457");
+    }
+    isFahrenheit = !isFahrenheit;
+  }
+  
